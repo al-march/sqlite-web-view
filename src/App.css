@@ -4,7 +4,6 @@
 
 html {
   font-family: sans-serif;
-  font-size: 14px;
 }
 
 table,
@@ -20,7 +19,6 @@ table,
 tr,
 .tr {
   width: fit-content;
-  height: 30px;
 }
 
 th,
@@ -31,6 +29,8 @@ td,
   padding: 0.25rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-break: keep-all;
+  white-space: nowrap;
 }
 
 th,
