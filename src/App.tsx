@@ -1,13 +1,9 @@
-import {
-  Table,
-  createSolidTable,
-  flexRender,
-  getCoreRowModel,
-} from "@tanstack/solid-table";
-import { For, Show, createSignal, onMount } from "solid-js";
+import { createSolidTable, getCoreRowModel } from "@tanstack/solid-table";
+import { createSignal, onMount } from "solid-js";
 import initSqlJs from "sql.js";
 import { Database } from "sql.js";
 import "./App.css";
+import { SqlTable } from "./components/Table";
 
 export const App = () => {
   const [db, setDb] = createSignal<Database>();
@@ -62,93 +58,12 @@ export const App = () => {
 
   return (
     <div style="overflow-x: auto">
-      <Show when={table()}>
-        {(table) => (
-          <div class="overflow-x-auto">
-            <div
-              {...{
-                class: "divTable",
-                style: {
-                  width: table().getTotalSize() + "px",
-                },
-              }}
-            >
-              <div class="thead">
-                <For each={table().getHeaderGroups()}>
-                  {(headerGroup) => (
-                    <div
-                      {...{
-                        key: headerGroup.id,
-                        class: "tr",
-                      }}
-                    >
-                      {headerGroup.headers.map((header) => (
-                        <div
-                          class="th"
-                          style={{
-                            width: header.getSize() + "px",
-                          }}
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                          <div
-                            {...{
-                              onMouseDown: header.getResizeHandler(),
-                              onTouchStart: header.getResizeHandler(),
-                              class: `resizer ${
-                                header.column.getIsResizing()
-                                  ? "isResizing"
-                                  : ""
-                              }`,
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </For>
-              </div>
-              <div
-                {...{
-                  class: "tbody",
-                }}
-              >
-                <For each={table().getRowModel().rows}>
-                  {(row) => (
-                    <div class="tr">
-                      <For each={row.getVisibleCells()}>
-                        {(cell) => (
-                          <div
-                            class="td"
-                            style={{
-                              width: cell.column.getSize() + "px",
-                            }}
-                          >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </div>
-                        )}
-                      </For>
-                    </div>
-                  )}
-                </For>
-              </div>
-            </div>
-          </div>
-        )}
-      </Show>
+      <SqlTable data={table()} />
     </div>
   );
 };
 
 async function initDB(dbUrl: string) {
-  // const worker = new Worker('/assets/sql-wasm.wasm');
   const dbFile = await fetchFile(dbUrl)
     .then((data) => data.blob())
     .then((blob) => blob.arrayBuffer());
