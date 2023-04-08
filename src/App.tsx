@@ -71,7 +71,7 @@ export const App = () => {
   }
 
   return (
-    <div style="overflow-x: auto">
+    <main style="overflow-x: auto">
       <header>
         <For each={tables()}>
           {(table) => (
@@ -79,6 +79,9 @@ export const App = () => {
           )}
         </For>
       </header>
+      
+      <SqlTable data={table} />
+
       <SqlPagination
         pageIndex={state.pagination.pageIndex}
         pageSize={state.pagination.pageSize}
@@ -89,8 +92,7 @@ export const App = () => {
           sqlTable.setPagination({ ...state.pagination, pageIndex })
         }
       />
-      <SqlTable data={table} />
-    </div>
+    </main>
   );
 };
 

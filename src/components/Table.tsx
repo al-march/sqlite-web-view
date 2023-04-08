@@ -1,5 +1,6 @@
 import { Table, flexRender } from "@tanstack/solid-table";
 import { For, Show } from "solid-js";
+import "./Table.css";
 
 type Props<T> = {
   data?: Table<T>;
@@ -9,8 +10,8 @@ export function SqlTable<T>(props: Props<T>) {
   return (
     <Show when={props.data}>
       {(table) => (
-        <div class="w-full overflow-hidden">
-          <div class="overflow-x-auto">
+        <div class="sql-table">
+          <div class="sql-table-container">
             <div
               {...{
                 class: "divTable",
@@ -19,7 +20,7 @@ export function SqlTable<T>(props: Props<T>) {
                 },
               }}
             >
-              <div class="thead">
+              <div class="sql-thead">
                 <For each={table().getHeaderGroups()}>
                   {(headerGroup) => (
                     <div
