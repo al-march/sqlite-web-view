@@ -79,12 +79,13 @@ export const App = () => {
           )}
         </For>
       </header>
-      
+
       <SqlTable data={table} />
 
       <SqlPagination
         pageIndex={state.pagination.pageIndex}
         pageSize={state.pagination.pageSize}
+        pageCount={table.getPageCount()}
         onPageSize={(pageSize) =>
           sqlTable.setPagination({ ...state.pagination, pageSize })
         }
