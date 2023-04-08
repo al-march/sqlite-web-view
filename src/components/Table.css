@@ -17,11 +17,11 @@
 }
 
 .divTable {
+  width: 100%;
   border: 1px solid lightgray;
   width: fit-content;
   position: relative;
 }
-
 
 .tr {
   display: flex;

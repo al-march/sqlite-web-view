@@ -3,15 +3,17 @@ import { For, Show } from "solid-js";
 import "./Table.css";
 
 type Props<T> = {
+  ref?: (el: HTMLElement) => void;
+  containerRef?: (el: HTMLElement) => void;
   data?: Table<T>;
 };
 
 export function SqlTable<T>(props: Props<T>) {
   return (
-    <Show when={props.data}>
+    <Show ref={props.ref} when={props.data}>
       {(table) => (
         <div class="sql-table">
-          <div class="sql-table-container">
+          <div ref={props.containerRef} class="sql-table-container">
             <div
               {...{
                 class: "divTable",
