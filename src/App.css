@@ -6,6 +6,18 @@ html {
   font-family: sans-serif;
 }
 
+.w-full {
+  width: 100%;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
 table,
 .divTable {
   border: 1px solid lightgray;

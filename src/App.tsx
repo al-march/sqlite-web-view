@@ -2,19 +2,26 @@ import {
   Table,
   createSolidTable,
   getCoreRowModel,
+  getPaginationRowModel,
 } from "@tanstack/solid-table";
 import { For, createSignal, onMount } from "solid-js";
 import initSqlJs from "sql.js";
 import { Database } from "sql.js";
-import "./App.css";
 import { SqlTable } from "./components/Table";
+import { createSqlTableState } from "./hooks/SqlTableState";
+import { SqlPagination } from "./components/Pagination";
+import "./App.css";
 
 export const App = () => {
   const [db, setDb] = createSignal<Database>();
   const [tables, setTables] = createSignal<string[]>([]);
-  const [table, setTable] = createSignal<Table<any>>();
-  const [tableData, setTableData] = createSignal<any>();
-  const [tableCols, setTableCols] = createSignal<any>();
+
+  const { state, table, ...sqlTable } = createSqlTableState({
+    pagination: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  });
 
   onMount(async () => {
     setDb(await initDB("/assets/db/dict.db"));
@@ -36,21 +43,23 @@ export const App = () => {
   }
 
   function selectTable(table: string) {
-    getTableData(table);
-    initTable();
+    const { data, columns } = getTableData(table);
+    sqlTable.setData(data);
+    sqlTable.setColumns(columns);
   }
 
   function getTableData(table: string) {
-    const [data] = db()!.exec(`SELECT * FROM ${table};`);
-    const columns = data.columns;
+    const [sqlExec] = db()!.exec(`SELECT * FROM ${table};`);
+    const sqlColumns = sqlExec.columns;
 
-    const tableData = data.values.map((row) => {
+    const data = sqlExec.values.map((row) => {
       return row.reduce((acc, cell, i) => {
-        acc[columns[i]] = cell;
+        acc[sqlColumns[i]] = cell;
         return acc;
       }, {});
     });
-    const tableColumns = columns.map((col) => {
+
+    const columns = sqlColumns.map((col) => {
       return {
         accessorKey: col,
         header: () => col,
@@ -58,23 +67,7 @@ export const App = () => {
       };
     });
 
-    setTableData(tableData);
-    setTableCols(tableColumns);
-  }
-
-  function initTable() {
-    const table = createSolidTable({
-      columnResizeMode: "onChange",
-      get data() {
-        return tableData();
-      },
-      columns: tableCols(),
-      getCoreRowModel: getCoreRowModel(),
-      debugTable: true,
-      debugHeaders: true,
-      debugColumns: true,
-    });
-    setTable(table);
+    return { data, columns };
   }
 
   return (
@@ -86,7 +79,17 @@ export const App = () => {
           )}
         </For>
       </header>
-      <SqlTable data={table()} />
+      <SqlPagination
+        pageIndex={state.pagination.pageIndex}
+        pageSize={state.pagination.pageSize}
+        onPageSize={(pageSize) =>
+          sqlTable.setPagination({ ...state.pagination, pageSize })
+        }
+        onPageIndex={(pageIndex) =>
+          sqlTable.setPagination({ ...state.pagination, pageIndex })
+        }
+      />
+      <SqlTable data={table} />
     </div>
   );
 };
