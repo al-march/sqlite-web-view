@@ -69,6 +69,7 @@ export const createSqlTable = (props: SqlTableStateProps) => {
 
   function selectTable(table: string) {
     const { data, columns } = getTableData(table);
+    setPagination({...state.pagination, pageIndex: 0});
     setData(data);
     setColumns(columns);
   }
