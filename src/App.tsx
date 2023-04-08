@@ -1,5 +1,9 @@
-import { createSolidTable, getCoreRowModel } from "@tanstack/solid-table";
-import { createSignal, onMount } from "solid-js";
+import {
+  Table,
+  createSolidTable,
+  getCoreRowModel,
+} from "@tanstack/solid-table";
+import { For, createSignal, onMount } from "solid-js";
 import initSqlJs from "sql.js";
 import { Database } from "sql.js";
 import "./App.css";
@@ -7,35 +11,37 @@ import { SqlTable } from "./components/Table";
 
 export const App = () => {
   const [db, setDb] = createSignal<Database>();
+  const [tables, setTables] = createSignal<string[]>([]);
   const [table, setTable] = createSignal<Table<any>>();
   const [tableData, setTableData] = createSignal<any>();
   const [tableCols, setTableCols] = createSignal<any>();
 
   onMount(async () => {
     setDb(await initDB("/assets/db/dict.db"));
-    getWords();
-    setTimeout(() => {
-      initTable();
-    });
+    getTables();
   });
 
-  function initTable() {
-    const table = createSolidTable({
-      columnResizeMode: "onChange",
-      get data() {
-        return tableData();
-      },
-      columns: tableCols(),
-      getCoreRowModel: getCoreRowModel(),
-      debugTable: true,
-      debugHeaders: true,
-      debugColumns: true,
-    });
-    setTable(table);
+  function getTables() {
+    const [data] = db()!.exec(/*sql*/ `
+        SELECT 
+          name 
+        FROM 
+          sqlite_schema 
+        WHERE
+          type ='table' AND 
+          name NOT LIKE 'sqlite_%';
+      `);
+    const tables = data.values.flat();
+    setTables(tables as string[]);
   }
 
-  function getWords() {
-    const [data] = db()!.exec("SELECT * FROM words;");
+  function selectTable(table: string) {
+    getTableData(table);
+    initTable();
+  }
+
+  function getTableData(table: string) {
+    const [data] = db()!.exec(`SELECT * FROM ${table};`);
     const columns = data.columns;
 
     const tableData = data.values.map((row) => {
@@ -56,8 +62,30 @@ export const App = () => {
     setTableCols(tableColumns);
   }
 
+  function initTable() {
+    const table = createSolidTable({
+      columnResizeMode: "onChange",
+      get data() {
+        return tableData();
+      },
+      columns: tableCols(),
+      getCoreRowModel: getCoreRowModel(),
+      debugTable: true,
+      debugHeaders: true,
+      debugColumns: true,
+    });
+    setTable(table);
+  }
+
   return (
     <div style="overflow-x: auto">
+      <header>
+        <For each={tables()}>
+          {(table) => (
+            <button onClick={() => selectTable(table)}>{table}</button>
+          )}
+        </For>
+      </header>
       <SqlTable data={table()} />
     </div>
   );
