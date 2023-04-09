@@ -1,6 +1,7 @@
 import { Button, Input, Row } from "@solsy/ui";
 
 type Props = {
+  command?: string;
   onCommand?: (value: string) => void;
   onRefresh?: () => void;
   onSave?: () => void;
@@ -19,6 +20,7 @@ export const SqlControlPanel = (props: Props) => {
           placeholder="SQL"
           size="xs"
           class="flex-1"
+          value={props.command}
           onChange={(e) => onCommand(e.currentTarget.value)}
         />
       </Row>

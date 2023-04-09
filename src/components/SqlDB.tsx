@@ -2,7 +2,7 @@ import { Database } from "sql.js";
 import { SqlTable } from "./Table";
 import { SqlPagination } from "./Pagination";
 import { createSqlTable } from "../hooks/SqlTableState";
-import { Divider, Row } from "@solsy/ui";
+import { Row } from "@solsy/ui";
 import { SqlTables } from "./SqlTables";
 import { SqlControlPanel } from "./ControlPanel";
 import { Show } from "solid-js";
@@ -34,20 +34,28 @@ export const SqlDB = (props: Props) => {
 
   return (
     <Row class="gap-4 flex-1 overflow-hidden">
-      <SqlTables
-        selected={state.selectedTable}
-        tables={state.tables}
-        orientation="col"
-        onSelect={sqlTable.selectTable}
-      />
+      <div class="pt-6">
+        <SqlTables
+          selected={state.selectedTable}
+          tables={state.tables}
+          orientation="col"
+          onSelect={sqlTable.selectTable}
+        />
+      </div>
 
       <Row orientation="col" class="flex-1 gap-2 overflow-hidden">
         <Row items="center" class="gap-2">
+          <SqlControlPanel
+            command={state.searchCommand}
+            onCommand={setSearchCommand}
+          />
           <Show when={state.data.length}>
-            {(length) => <p>All: {length()}</p>}
+            {(length) => (
+              <>
+                | <p>All: {length()}</p>
+              </>
+            )}
           </Show>
-          |
-          <SqlControlPanel onCommand={setSearchCommand} />
         </Row>
 
         <SqlTable table={table} />

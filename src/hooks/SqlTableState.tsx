@@ -15,6 +15,7 @@ export type SqlTableState = {
 
   tables: string[];
   selectedTable: string;
+  searchCommand: string;
 };
 
 export type SqlTableStateProps = {
@@ -31,6 +32,7 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     columns: [],
     tables: [],
     selectedTable: "",
+    searchCommand: "",
   });
 
   init();
@@ -72,7 +74,8 @@ export const createSqlTable = (props: SqlTableStateProps) => {
   function selectTable(table: string) {
     setState("selectedTable", table);
     const { data, columns } = getTableData(table);
-    setPagination({ ...state.pagination, pageIndex: 0 });
+    resetPagination();
+    resetSearchCommand();
     setData(data);
     setColumns(columns);
   }
@@ -88,7 +91,7 @@ export const createSqlTable = (props: SqlTableStateProps) => {
         columns: [],
       };
     }
-    
+
     const sqlColumns = sqlExec.columns;
 
     const data = sqlExec.values.map((row) => {
@@ -120,10 +123,21 @@ export const createSqlTable = (props: SqlTableStateProps) => {
   }
 
   function setSearchCommand(command: string) {
+    setState("searchCommand", command);
+    resetPagination();
+
     const { data, columns } = getTableData(state.selectedTable, command);
-    setPagination({ ...state.pagination, pageIndex: 0 });
+
     setData(data);
     setColumns(columns);
+  }
+
+  function resetPagination() {
+    setPagination({ ...state.pagination, pageIndex: 0 });
+  }
+
+  function resetSearchCommand() {
+    setState('searchCommand', '');
   }
 
   return {
