@@ -44,8 +44,12 @@ tr,
   touch-action: none;
 }
 
+.resizer:hover {
+  background: hsl(var(--wa));
+}
+
 .resizer.isResizing {
-  background: blue;
+  background: hsl(var(--er));
   opacity: 1;
 }
 
