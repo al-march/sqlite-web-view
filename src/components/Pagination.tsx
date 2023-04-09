@@ -36,17 +36,31 @@ export const SqlPagination = (props: SqlPaginationProps) => {
     onPageIndex(count + 1);
   }
 
+  function onStart() {
+    onPageIndex(0);
+  }
+
+  function onEnd() {
+    onPageIndex((props.pageCount || 1) - 1);
+  }
+
   return (
     <section class="flex items-center gap-2">
+      <button class="pag-btn" onClick={onStart} disabled={isPrevDisabled()}>
+        {"<<"}
+      </button>
       <button class="pag-btn" onClick={onPrev} disabled={isPrevDisabled()}>
         {"<"}
       </button>
       <button class="pag-btn" onClick={onNext} disabled={isNextDisabled()}>
         {">"}
       </button>
+      <button class="pag-btn" onClick={onEnd} disabled={isNextDisabled()}>
+        {">>"}
+      </button>
 
       <span>
-        Page {props.pageIndex + 1} of {props.pageCount || 0}
+        Page <b>{props.pageIndex + 1}</b> of <b>{props.pageCount || 0}</b>
       </span>
 
       <select
