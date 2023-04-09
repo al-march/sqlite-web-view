@@ -1,6 +1,6 @@
 import { createMemo } from "solid-js";
-import { ISqlPagination } from "../models/SqlTable.model";
 import { Button, Input, Row } from "@solsy/ui";
+import { ISqlPagination } from "../../models/SqlTable.model";
 import "./Pagination.css";
 
 export interface SqlPaginationProps {

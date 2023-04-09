@@ -8,7 +8,7 @@ export const App = () => {
   const [db, setDb] = createSignal<Database>();
 
   onMount(async () => {
-    setDb(await initDB("/assets/db/oxford.db"));
+    setDb(await initDB("/assets/db/dict.db"));
   });
 
   return (
