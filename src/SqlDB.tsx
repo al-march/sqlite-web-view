@@ -19,19 +19,24 @@ export const SqlDB = (props: Props) => {
     },
   });
 
-  function onPaginationChange() {   
+  function onPaginationChange() {
     tableRef()!.scrollTo({
       top: 0,
-      behavior: 'smooth'
-    })
+      behavior: "smooth",
+    });
   }
 
   return (
     <>
-      <header>
+      <header class="flex gap-1">
         <For each={state.tables}>
           {(table) => (
-            <button onClick={() => sqlTable.selectTable(table)}>{table}</button>
+            <button
+              class="border rounded p-1"
+              onClick={() => sqlTable.selectTable(table)}
+            >
+              {table}
+            </button>
           )}
         </For>
       </header>

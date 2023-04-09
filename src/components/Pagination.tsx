@@ -1,5 +1,6 @@
 import { createMemo } from "solid-js";
 import { ISqlPagination } from "../models/SqlTable.model";
+import "./Pagination.css";
 
 export interface SqlPaginationProps extends ISqlPagination {
   pageCount?: number;
@@ -14,7 +15,7 @@ export const SqlPagination = (props: SqlPaginationProps) => {
   });
 
   const isNextDisabled = createMemo(() => {
-    return (props.pageIndex + 1) === props.pageCount;
+    return props.pageIndex + 1 === props.pageCount;
   });
 
   function onPageSize(value: number) {
@@ -36,19 +37,11 @@ export const SqlPagination = (props: SqlPaginationProps) => {
   }
 
   return (
-    <section style="display: flex; gap: 10px">
-      <button
-        class="border rounded p-1"
-        onClick={onPrev}
-        disabled={isPrevDisabled()}
-      >
+    <section class="flex items-center gap-2">
+      <button class="pag-btn" onClick={onPrev} disabled={isPrevDisabled()}>
         {"<"}
       </button>
-      <button
-        class="border rounded p-1"
-        onClick={onNext}
-        disabled={isNextDisabled()}
-      >
+      <button class="pag-btn" onClick={onNext} disabled={isNextDisabled()}>
         {">"}
       </button>
 
@@ -57,6 +50,7 @@ export const SqlPagination = (props: SqlPaginationProps) => {
       </span>
 
       <select
+        class="border rounded p-1 cursor-pointer"
         value={props.pageSize}
         onChange={(e) => onPageSize(Number(e.currentTarget.value))}
       >

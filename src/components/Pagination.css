@@ -1,0 +1,7 @@
+.pag-btn {
+  @apply border rounded p-1;
+}
+
+.pag-btn:disabled {
+  @apply opacity-30 cursor-not-allowed;
+}
