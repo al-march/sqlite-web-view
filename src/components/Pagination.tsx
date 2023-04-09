@@ -1,7 +1,7 @@
 import { createMemo } from "solid-js";
 import { ISqlPagination } from "../models/SqlTable.model";
-import "./Pagination.css";
 import { Button, Row } from "@solsy/ui";
+import "./Pagination.css";
 
 export interface SqlPaginationProps extends ISqlPagination {
   pageCount?: number;

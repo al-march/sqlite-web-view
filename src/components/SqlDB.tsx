@@ -20,7 +20,7 @@ export const SqlDB = (props: Props) => {
 
   return (
     <>
-      <header class="flex gap-1 p-2">
+      <header class="flex gap-1 py-1 overflow-hidden overflow-x-auto">
         <For each={state.tables}>
           {(table) => (
             <Button

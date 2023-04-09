@@ -12,7 +12,7 @@ export const App = () => {
   });
 
   return (
-    <main style="overflow-x: auto">
+    <main class="overflow-x-auto">
       <Show when={db()} fallback={<p>Loading...</p>}>
         {(db) => <SqlDB db={db()} />}
       </Show>
