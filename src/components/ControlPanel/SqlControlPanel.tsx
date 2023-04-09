@@ -12,7 +12,7 @@ export const SqlControlPanel = (props: Props) => {
   }
 
   return (
-    <Row items="center" class="flex gap-1 p-1 max-w-[600px]">
+    <Row items="center" class="flex-1 gap-1 py-1 max-w-[600px]">
       <Row items="center" class="gap-2 flex-1">
         <b>WHERE</b>{" "}
         <Input
