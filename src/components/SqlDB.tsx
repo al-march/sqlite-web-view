@@ -2,8 +2,7 @@ import { Database } from "sql.js";
 import { SqlTable } from "./Table";
 import { SqlPagination } from "./Pagination";
 import { createSqlTable } from "../hooks/SqlTableState";
-import { For } from "solid-js";
-import { Button, Row } from "@solsy/ui";
+import { Row } from "@solsy/ui";
 import { SqlTables } from "./SqlTables";
 
 type Props = {
@@ -19,6 +18,14 @@ export const SqlDB = (props: Props) => {
     },
   });
 
+  function setPageSize(pageSize: number) {
+    sqlTable.setPagination({ ...state.pagination, pageSize });
+  }
+
+  function setPageIndex(pageIndex: number) {
+    sqlTable.setPagination({ ...state.pagination, pageIndex });
+  }
+
   return (
     <Row class="gap-4 flex-1 overflow-hidden">
       <SqlTables
@@ -28,18 +35,14 @@ export const SqlDB = (props: Props) => {
         onSelect={sqlTable.selectTable}
       />
 
-      <Row orientation="col" class="flex-1 gap-2 overflow-hidden h-full">
+      <Row orientation="col" class="flex-1 gap-2 overflow-hidden">
         <SqlTable table={table} />
 
         <SqlPagination
           pagination={state.pagination}
           pageCount={table.getPageCount()}
-          onPageSize={(pageSize) =>
-            sqlTable.setPagination({ ...state.pagination, pageSize })
-          }
-          onPageIndex={(pageIndex) =>
-            sqlTable.setPagination({ ...state.pagination, pageIndex })
-          }
+          onPageSize={setPageSize}
+          onPageIndex={setPageIndex}
         />
       </Row>
     </Row>
