@@ -1,6 +1,6 @@
 import { createMemo } from "solid-js";
 import { ISqlPagination } from "../models/SqlTable.model";
-import { Button, Row } from "@solsy/ui";
+import { Button, Input, Row } from "@solsy/ui";
 import "./Pagination.css";
 
 export interface SqlPaginationProps {
@@ -46,6 +46,20 @@ export const SqlPagination = (props: SqlPaginationProps) => {
     onPageIndex((props.pageCount || 1) - 1);
   }
 
+  function onInputChange(input: HTMLInputElement) {
+    const value = Number(input.value);
+
+    if (value > props.pageCount) {
+      input.value = props.pageCount.toString();
+    }
+
+    if (value < 1) {
+      input.value = "1";
+    }
+
+    onPageIndex(Number(input.value) - 1);
+  }
+
   return (
     <Row class="gap-2" items="center">
       <Row>
@@ -63,9 +77,18 @@ export const SqlPagination = (props: SqlPaginationProps) => {
         </Button>
       </Row>
 
-      <span>
-        Page <b>{props.pagination.pageIndex + 1}</b> of <b>{props.pageCount || 0}</b>
-      </span>
+      <Row items="center" class="gap-2 p-1">
+        Page{" "}
+        <Input
+          bordered
+          class="w-[50px] placeholder:text-base input-without-arrows"
+          size="xs"
+          value={props.pagination.pageIndex + 1}
+          type="number"
+          onChange={(e) => onInputChange(e.currentTarget)}
+        />{" "}
+        of <b>{props.pageCount || 0}</b>
+      </Row>
 
       <select
         class="select select-xs select-bordered"
