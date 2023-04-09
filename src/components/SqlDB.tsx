@@ -1,7 +1,7 @@
 import { Database } from "sql.js";
-import { SqlTable } from "./components/Table";
-import { SqlPagination } from "./components/Pagination";
-import { createSqlTable } from "./hooks/SqlTableState";
+import { SqlTable } from "./Table";
+import { SqlPagination } from "./Pagination";
+import { createSqlTable } from "../hooks/SqlTableState";
 import { For, createSignal } from "solid-js";
 
 type Props = {
@@ -28,11 +28,14 @@ export const SqlDB = (props: Props) => {
 
   return (
     <>
-      <header class="flex gap-1">
+      <header class="flex gap-2">
         <For each={state.tables}>
           {(table) => (
             <button
-              class="border rounded p-1"
+              class="font-bold p-1"
+              classList={{
+                "underline": state.selectedTable === table,
+              }}
               onClick={() => sqlTable.selectTable(table)}
             >
               {table}

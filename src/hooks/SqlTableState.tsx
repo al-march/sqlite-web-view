@@ -14,6 +14,7 @@ export type SqlTableState = {
   columns: ColumnDef<unknown, any>[];
 
   tables: string[];
+  selectedTable: string;
 };
 
 export type SqlTableStateProps = {
@@ -29,6 +30,7 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     data: [],
     columns: [],
     tables: [],
+    selectedTable: "",
   });
 
   init();
@@ -68,8 +70,9 @@ export const createSqlTable = (props: SqlTableStateProps) => {
   }
 
   function selectTable(table: string) {
+    setState("selectedTable", table);
     const { data, columns } = getTableData(table);
-    setPagination({...state.pagination, pageIndex: 0});
+    setPagination({ ...state.pagination, pageIndex: 0 });
     setData(data);
     setColumns(columns);
   }

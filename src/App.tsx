@@ -2,7 +2,7 @@ import { Show, createSignal, onMount } from "solid-js";
 import initSqlJs from "sql.js";
 import { Database } from "sql.js";
 import "./App.css";
-import { SqlDB } from "./SqlDB";
+import { SqlDB } from "./components/SqlDB";
 
 export const App = () => {
   const [db, setDb] = createSignal<Database>();
