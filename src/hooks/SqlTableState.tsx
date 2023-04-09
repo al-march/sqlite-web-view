@@ -102,6 +102,11 @@ export const createSqlTable = (props: SqlTableStateProps) => {
   function init() {
     const tables = getTables(props.db);
     setState("tables", tables);
+
+    const [firstTable] = tables;
+    if (firstTable) {
+      setTimeout(() => selectTable(firstTable));
+    }
   }
 
   return {
