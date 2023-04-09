@@ -5,24 +5,23 @@ import "./Table.css";
 type Props<T> = {
   ref?: (el: HTMLElement) => void;
   containerRef?: (el: HTMLElement) => void;
-  data?: Table<T>;
+  table?: Table<T>;
 };
 
 export function SqlTable<T>(props: Props<T>) {
   return (
-    <Show ref={props.ref} when={props.data}>
+    <Show ref={props.ref} when={props.table}>
       {(table) => (
-        <div class="sql-table">
-          <div ref={props.containerRef} class="sql-table-container">
+        <div class="flex flex-1 overflow-hidden h-full">
+          <div ref={props.containerRef} class="flex-1 overflow-y-auto">
             <div
               {...{
-                class: "divTable",
                 style: {
                   width: table().getTotalSize() + "px",
                 },
               }}
             >
-              <div class="sql-thead">
+              <div class="sticky top-0 bg-gray-200">
                 <For each={table().getHeaderGroups()}>
                   {(headerGroup) => (
                     <div
@@ -61,11 +60,7 @@ export function SqlTable<T>(props: Props<T>) {
                   )}
                 </For>
               </div>
-              <div
-                {...{
-                  class: "tbody",
-                }}
-              >
+              <div>
                 <For each={table().getRowModel().rows}>
                   {(row) => (
                     <div class="tr">

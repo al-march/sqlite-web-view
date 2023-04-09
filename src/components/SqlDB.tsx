@@ -9,22 +9,13 @@ type Props = {
 };
 
 export const SqlDB = (props: Props) => {
-  const [tableRef, setTableRef] = createSignal<HTMLElement>();
   const { state, table, ...sqlTable } = createSqlTable({
     db: props.db,
-    onPaginationChange,
     pagination: {
       pageIndex: 0,
       pageSize: 50,
     },
   });
-
-  function onPaginationChange() {
-    tableRef()!.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
 
   return (
     <>
@@ -34,7 +25,8 @@ export const SqlDB = (props: Props) => {
             <button
               class="font-bold p-1"
               classList={{
-                "underline": state.selectedTable === table,
+                "opacity-50": state.selectedTable !== table,
+                "underline opacity-100": state.selectedTable === table,
               }}
               onClick={() => sqlTable.selectTable(table)}
             >
@@ -44,7 +36,7 @@ export const SqlDB = (props: Props) => {
         </For>
       </header>
 
-      <SqlTable containerRef={setTableRef} data={table} />
+      <SqlTable table={table} />
 
       <SqlPagination
         pageIndex={state.pagination.pageIndex}

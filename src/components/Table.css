@@ -1,21 +1,3 @@
-.sql-table {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  height: 100%;
-}
-
-.sql-table-container {
-  flex: 1;
-  overflow-y: auto;
-}
-
-.sql-thead {
-  position: sticky;
-  top: 0;
-  background: #eee;
-}
-
 .divTable {
   width: 100%;
   border: 1px solid lightgray;
@@ -32,9 +14,7 @@ tr,
   width: fit-content;
 }
 
-th,
 .th,
-td,
 .td {
   box-shadow: inset 0 0 0 1px lightgray;
   padding: 0.25rem;
@@ -44,7 +24,6 @@ td,
   white-space: nowrap;
 }
 
-th,
 .th {
   padding: 2px 4px;
   position: relative;
@@ -53,7 +32,6 @@ th,
   height: 30px;
 }
 
-td,
 .td {
   height: 30px;
 }
