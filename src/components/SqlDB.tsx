@@ -3,7 +3,7 @@ import { SqlTable } from "./Table";
 import { SqlPagination } from "./Pagination";
 import { createSqlTable } from "../hooks/SqlTableState";
 import { For } from "solid-js";
-import { Button } from "@solsy/ui";
+import { Button, Row } from "@solsy/ui";
 
 type Props = {
   db: Database;
@@ -19,12 +19,12 @@ export const SqlDB = (props: Props) => {
   });
 
   return (
-    <>
-      <header class="flex gap-1 py-1 overflow-hidden overflow-x-auto">
+    <Row class="gap-4 flex-1 overflow-hidden">
+      <Row orientation="col" class="gap-1 overflow-hidden overflow-y-auto">
         <For each={state.tables}>
           {(table) => (
             <Button
-              class="lowercase"
+              class="lowercase justify-start"
               size="sm"
               color={state.selectedTable === table ? "primary" : "ghost"}
               onClick={() => sqlTable.selectTable(table)}
@@ -33,21 +33,23 @@ export const SqlDB = (props: Props) => {
             </Button>
           )}
         </For>
-      </header>
+      </Row>
 
-      <SqlTable table={table} />
+      <Row orientation="col" class="flex-1 gap-2 overflow-hidden h-full">
+        <SqlTable table={table} />
 
-      <SqlPagination
-        pageIndex={state.pagination.pageIndex}
-        pageSize={state.pagination.pageSize}
-        pageCount={table.getPageCount()}
-        onPageSize={(pageSize) =>
-          sqlTable.setPagination({ ...state.pagination, pageSize })
-        }
-        onPageIndex={(pageIndex) =>
-          sqlTable.setPagination({ ...state.pagination, pageIndex })
-        }
-      />
-    </>
+        <SqlPagination
+          pageIndex={state.pagination.pageIndex}
+          pageSize={state.pagination.pageSize}
+          pageCount={table.getPageCount()}
+          onPageSize={(pageSize) =>
+            sqlTable.setPagination({ ...state.pagination, pageSize })
+          }
+          onPageIndex={(pageIndex) =>
+            sqlTable.setPagination({ ...state.pagination, pageIndex })
+          }
+        />
+      </Row>
+    </Row>
   );
 };
