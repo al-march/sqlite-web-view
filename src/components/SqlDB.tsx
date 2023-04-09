@@ -4,6 +4,7 @@ import { SqlPagination } from "./Pagination";
 import { createSqlTable } from "../hooks/SqlTableState";
 import { For } from "solid-js";
 import { Button, Row } from "@solsy/ui";
+import { SqlTables } from "./SqlTables";
 
 type Props = {
   db: Database;
@@ -20,27 +21,18 @@ export const SqlDB = (props: Props) => {
 
   return (
     <Row class="gap-4 flex-1 overflow-hidden">
-      <Row orientation="col" class="gap-1 overflow-hidden overflow-y-auto">
-        <For each={state.tables}>
-          {(table) => (
-            <Button
-              class="lowercase justify-start"
-              size="sm"
-              color={state.selectedTable === table ? "primary" : "ghost"}
-              onClick={() => sqlTable.selectTable(table)}
-            >
-              {table}
-            </Button>
-          )}
-        </For>
-      </Row>
+      <SqlTables
+        selected={state.selectedTable}
+        tables={state.tables}
+        orientation="col"
+        onSelect={sqlTable.selectTable}
+      />
 
       <Row orientation="col" class="flex-1 gap-2 overflow-hidden h-full">
         <SqlTable table={table} />
 
         <SqlPagination
-          pageIndex={state.pagination.pageIndex}
-          pageSize={state.pagination.pageSize}
+          pagination={state.pagination}
           pageCount={table.getPageCount()}
           onPageSize={(pageSize) =>
             sqlTable.setPagination({ ...state.pagination, pageSize })
