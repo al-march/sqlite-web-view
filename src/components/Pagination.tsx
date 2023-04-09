@@ -1,6 +1,7 @@
 import { createMemo } from "solid-js";
 import { ISqlPagination } from "../models/SqlTable.model";
 import "./Pagination.css";
+import { Button, Row } from "@solsy/ui";
 
 export interface SqlPaginationProps extends ISqlPagination {
   pageCount?: number;
@@ -45,26 +46,28 @@ export const SqlPagination = (props: SqlPaginationProps) => {
   }
 
   return (
-    <section class="flex items-center gap-2">
-      <button class="pag-btn" onClick={onStart} disabled={isPrevDisabled()}>
-        {"<<"}
-      </button>
-      <button class="pag-btn" onClick={onPrev} disabled={isPrevDisabled()}>
-        {"<"}
-      </button>
-      <button class="pag-btn" onClick={onNext} disabled={isNextDisabled()}>
-        {">"}
-      </button>
-      <button class="pag-btn" onClick={onEnd} disabled={isNextDisabled()}>
-        {">>"}
-      </button>
+    <Row class="gap-2" items="center">
+      <Row>
+        <Button size="xs" square onClick={onStart} disabled={isPrevDisabled()}>
+          {"<<"}
+        </Button>
+        <Button size="xs" square onClick={onPrev} disabled={isPrevDisabled()}>
+          {"<"}
+        </Button>
+        <Button size="xs" square onClick={onNext} disabled={isNextDisabled()}>
+          {">"}
+        </Button>
+        <Button size="xs" square onClick={onEnd} disabled={isNextDisabled()}>
+          {">>"}
+        </Button>
+      </Row>
 
       <span>
         Page <b>{props.pageIndex + 1}</b> of <b>{props.pageCount || 0}</b>
       </span>
 
       <select
-        class="border rounded p-1 cursor-pointer"
+        class="select select-xs select-bordered"
         value={props.pageSize}
         onChange={(e) => onPageSize(Number(e.currentTarget.value))}
       >
@@ -72,6 +75,6 @@ export const SqlPagination = (props: SqlPaginationProps) => {
         <option value={50}>50</option>
         <option value={100}>100</option>
       </select>
-    </section>
+    </Row>
   );
 };

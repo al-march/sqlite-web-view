@@ -1,6 +1,5 @@
 .divTable {
   width: 100%;
-  border: 1px solid lightgray;
   width: fit-content;
   position: relative;
 }
@@ -16,7 +15,7 @@ tr,
 
 .th,
 .td {
-  box-shadow: inset 0 0 0 1px lightgray;
+  box-shadow: inset 0 0 0 2px hsl(var(--b3));
   padding: 0.25rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -25,10 +24,7 @@ tr,
 }
 
 .th {
-  padding: 2px 4px;
-  position: relative;
-  font-weight: bold;
-  text-align: center;
+  @apply p-1 relative font-bold text-center;
   height: 30px;
 }
 

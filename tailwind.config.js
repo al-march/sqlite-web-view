@@ -2,10 +2,11 @@
 export default {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
+    "node_modules/@solsy/ui/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }
 

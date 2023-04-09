@@ -2,7 +2,8 @@ import { Database } from "sql.js";
 import { SqlTable } from "./Table";
 import { SqlPagination } from "./Pagination";
 import { createSqlTable } from "../hooks/SqlTableState";
-import { For, createSignal } from "solid-js";
+import { For } from "solid-js";
+import { Button } from "@solsy/ui";
 
 type Props = {
   db: Database;
@@ -19,19 +20,17 @@ export const SqlDB = (props: Props) => {
 
   return (
     <>
-      <header class="flex gap-2">
+      <header class="flex gap-1 p-2">
         <For each={state.tables}>
           {(table) => (
-            <button
-              class="font-bold p-1"
-              classList={{
-                "opacity-50": state.selectedTable !== table,
-                "underline opacity-100": state.selectedTable === table,
-              }}
+            <Button
+              class="lowercase"
+              size="sm"
+              color={state.selectedTable === table ? "primary" : "ghost"}
               onClick={() => sqlTable.selectTable(table)}
             >
               {table}
-            </button>
+            </Button>
           )}
         </For>
       </header>

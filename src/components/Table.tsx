@@ -21,7 +21,7 @@ export function SqlTable<T>(props: Props<T>) {
                 },
               }}
             >
-              <div class="sticky top-0 bg-gray-200">
+              <div class="sticky top-0 bg-neutral">
                 <For each={table().getHeaderGroups()}>
                   {(headerGroup) => (
                     <div
