@@ -29,6 +29,7 @@
     "@solsy/ui": "^0.0.15",
     "@tanstack/solid-table": "^8.8.5",
     "daisyui": "^2.51.5",
+    "material-icons": "^1.13.4",
     "solid-js": "^1.7.2",
     "sql.js": "^1.8.0"
   }

@@ -1,3 +1,4 @@
+import "material-icons/iconfont/material-icons.css";
 import { render } from "solid-js/web";
 import { App } from "./App";
 

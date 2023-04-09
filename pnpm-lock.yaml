@@ -10,6 +10,7 @@ specifiers:
   autoprefixer: ^10.4.14
   daisyui: ^2.51.5
   jsdom: ^21.1.1
+  material-icons: ^1.13.4
   postcss: ^8.4.21
   solid-js: ^1.7.2
   sql.js: ^1.8.0
@@ -23,6 +24,7 @@ dependencies:
   '@solsy/ui': 0.0.15_solid-js@1.7.2
   '@tanstack/solid-table': 8.8.5_solid-js@1.7.2
   daisyui: 2.51.5_j7yt3jd32cwenjqavrrga47yr4
+  material-icons: 1.13.4
   solid-js: 1.7.2
   sql.js: 1.8.0
 
@@ -1974,6 +1976,10 @@ packages:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
     hasBin: true
     dev: true
+
+  /material-icons/1.13.4:
+    resolution: {integrity: sha512-sGljRSo7fG6iK6QXM+LG7ZdMFZnRKaqdVCBO3l7nmweOUKQBkc3y3h2jU0HX+49kGET7/xIo8Ujq+4BG+7u7bw==}
+    dev: false
 
   /merge-anything/5.1.4:
     resolution: {integrity: sha512-7PWKwGOs5WWcpw+/OvbiFiAvEP6bv/QHiicigpqMGKIqPPAtGhBLR8LFJW+Zu6m9TXiR/a8+AiPlGG0ko1ruoQ==}

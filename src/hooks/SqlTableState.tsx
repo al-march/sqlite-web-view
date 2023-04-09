@@ -77,8 +77,18 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     setColumns(columns);
   }
 
-  function getTableData(table: string) {
-    const [sqlExec] = props.db.exec(`SELECT * FROM ${table};`);
+  function getTableData(table: string, searchCommand = "") {
+    if (searchCommand) {
+      searchCommand = "WHERE " + searchCommand;
+    }
+    const [sqlExec] = props.db.exec(`SELECT * FROM ${table} ${searchCommand};`);
+    if (!sqlExec) {
+      return {
+        data: [],
+        columns: [],
+      };
+    }
+    
     const sqlColumns = sqlExec.columns;
 
     const data = sqlExec.values.map((row) => {
@@ -109,6 +119,13 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     }
   }
 
+  function setSearchCommand(command: string) {
+    const { data, columns } = getTableData(state.selectedTable, command);
+    setPagination({ ...state.pagination, pageIndex: 0 });
+    setData(data);
+    setColumns(columns);
+  }
+
   return {
     state,
     table,
@@ -116,6 +133,7 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     setData,
     setColumns,
     selectTable,
+    setSearchCommand,
   };
 };
 

@@ -13,10 +13,16 @@ export interface SqlPaginationProps {
 
 export const SqlPagination = (props: SqlPaginationProps) => {
   const isPrevDisabled = createMemo(() => {
+    if (props.pageCount === 0) {
+      return true;
+    }
     return props.pagination.pageIndex === 0;
   });
 
   const isNextDisabled = createMemo(() => {
+    if (props.pageCount === 0) {
+      return true;
+    }
     return props.pagination.pageIndex + 1 === props.pageCount;
   });
 
@@ -87,7 +93,7 @@ export const SqlPagination = (props: SqlPaginationProps) => {
           type="number"
           onChange={(e) => onInputChange(e.currentTarget)}
         />{" "}
-        of <b>{props.pageCount || 0}</b>
+        of <b>{props.pageCount || 1}</b>
       </Row>
 
       <select

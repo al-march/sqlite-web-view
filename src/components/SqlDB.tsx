@@ -4,6 +4,7 @@ import { SqlPagination } from "./Pagination";
 import { createSqlTable } from "../hooks/SqlTableState";
 import { Row } from "@solsy/ui";
 import { SqlTables } from "./SqlTables";
+import { SqlControlPanel } from "./ControlPanel";
 
 type Props = {
   db: Database;
@@ -26,6 +27,10 @@ export const SqlDB = (props: Props) => {
     sqlTable.setPagination({ ...state.pagination, pageIndex });
   }
 
+  function setSearchCommand(value: string) {
+    sqlTable.setSearchCommand(value);
+  }
+
   return (
     <Row class="gap-4 flex-1 overflow-hidden">
       <SqlTables
@@ -36,6 +41,8 @@ export const SqlDB = (props: Props) => {
       />
 
       <Row orientation="col" class="flex-1 gap-2 overflow-hidden">
+        <SqlControlPanel onCommand={setSearchCommand} />
+
         <SqlTable table={table} />
 
         <SqlPagination
