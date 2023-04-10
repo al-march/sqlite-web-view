@@ -49,7 +49,7 @@ export const SqlDB = (props: Props) => {
             command={state.searchCommand}
             onCommand={setSearchCommand}
           />
-          <Show when={state.data.length}>
+          <Show when={state.rowsCount}>
             {(length) => (
               <>
                 | <p>All: {length()}</p>
@@ -62,7 +62,7 @@ export const SqlDB = (props: Props) => {
 
         <SqlPagination
           pagination={state.pagination}
-          pageCount={table.getPageCount()}
+          pageCount={state.pageCount}
           onPageSize={setPageSize}
           onPageIndex={setPageIndex}
         />

@@ -4,9 +4,8 @@ import {
   ColumnDef,
   createSolidTable,
   getCoreRowModel,
-  getPaginationRowModel,
 } from "@tanstack/solid-table";
-import { Database } from "sql.js";
+import { Database, QueryExecResult } from "sql.js";
 
 export type SqlTableState = {
   pagination: ISqlPagination;
@@ -16,6 +15,9 @@ export type SqlTableState = {
   tables: string[];
   selectedTable: string;
   searchCommand: string;
+
+  rowsCount: number;
+  pageCount: number;
 };
 
 export type SqlTableStateProps = {
@@ -33,6 +35,11 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     tables: [],
     selectedTable: "",
     searchCommand: "",
+
+    rowsCount: 0,
+    get pageCount() {
+      return calculatePageCount();
+    },
   });
 
   init();
@@ -46,21 +53,53 @@ export const createSqlTable = (props: SqlTableStateProps) => {
       return state.columns;
     },
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     autoResetPageIndex: true,
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,
   });
 
-  table.setPageSize(state.pagination.pageSize);
-
   function setPagination(pag: ISqlPagination) {
-    setState("pagination", pag);
-    table.setPageSize(pag.pageSize);
-    table.setPageIndex(pag.pageIndex);
+    const pageCount = calculatePageCount(state.rowsCount, pag.pageSize);
 
+    if (pag.pageIndex * pag.pageSize > state.rowsCount) {
+      pag.pageIndex = pageCount - 1;
+    }
+
+    setState("pagination", pag);
+    updateTableData();
     props.onPaginationChange?.();
+  }
+
+  function selectTable(table: string) {
+    setState("selectedTable", table);
+    resetPagination();
+    resetSearchCommand();
+    updateTableData();
+  }
+
+  function updateTableData(
+    table = state.selectedTable,
+    searchCommand = state.searchCommand
+  ) {
+    if (searchCommand) {
+      searchCommand = "WHERE " + searchCommand;
+    }
+
+    const [sqlCount] = props.db.exec(
+      `SELECT COUNT(*) FROM ${table} ${searchCommand}`
+    );
+    const [[count]] = sqlCount.values;
+    setState("rowsCount", count as number);
+
+    const from = state.pagination.pageSize * state.pagination.pageIndex;
+    const [sqlExec] = props.db.exec(
+      `SELECT * FROM ${table} ${searchCommand} limit ${from}, ${state.pagination.pageSize};`
+    );
+
+    const { data, columns } = getRows(sqlExec);
+    setData(data);
+    setColumns(columns);
   }
 
   function setData(data: SqlTableState["data"]) {
@@ -71,45 +110,30 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     setState("columns", columns);
   }
 
-  function selectTable(table: string) {
-    setState("selectedTable", table);
-    const { data, columns } = getTableData(table);
-    resetPagination();
-    resetSearchCommand();
-    setData(data);
-    setColumns(columns);
-  }
+  function getRows(sqlExec?: QueryExecResult) {
+    try {
+      const sqlColumns = sqlExec.columns;
 
-  function getTableData(table: string, searchCommand = "") {
-    if (searchCommand) {
-      searchCommand = "WHERE " + searchCommand;
+      const data = sqlExec.values.map((row) => {
+        return row.reduce((acc, cell, i) => {
+          acc[sqlColumns[i]] = cell;
+          return acc;
+        }, {});
+      });
+
+      const columns = sqlColumns.map((col) => {
+        return {
+          accessorKey: col,
+          header: () => col,
+          footer: (info) => info.column.id,
+        };
+      });
+
+      return { data, columns };
+    } catch (e) {
+      console.error(e);
+      return { data: [], columns: [] };
     }
-    const [sqlExec] = props.db.exec(`SELECT * FROM ${table} ${searchCommand};`);
-    if (!sqlExec) {
-      return {
-        data: [],
-        columns: [],
-      };
-    }
-
-    const sqlColumns = sqlExec.columns;
-
-    const data = sqlExec.values.map((row) => {
-      return row.reduce((acc, cell, i) => {
-        acc[sqlColumns[i]] = cell;
-        return acc;
-      }, {});
-    });
-
-    const columns = sqlColumns.map((col) => {
-      return {
-        accessorKey: col,
-        header: () => col,
-        footer: (info) => info.column.id,
-      };
-    });
-
-    return { data, columns };
   }
 
   function init() {
@@ -125,11 +149,7 @@ export const createSqlTable = (props: SqlTableStateProps) => {
   function setSearchCommand(command: string) {
     setState("searchCommand", command);
     resetPagination();
-
-    const { data, columns } = getTableData(state.selectedTable, command);
-
-    setData(data);
-    setColumns(columns);
+    updateTableData();
   }
 
   function resetPagination() {
@@ -137,16 +157,23 @@ export const createSqlTable = (props: SqlTableStateProps) => {
   }
 
   function resetSearchCommand() {
-    setState('searchCommand', '');
+    setState("searchCommand", "");
+  }
+
+  function calculatePageCount(
+    rowsCount = state.rowsCount,
+    pageSize = state.pagination.pageSize
+  ): number {
+    return Math.ceil(rowsCount / pageSize);
   }
 
   return {
     state,
     table,
+    selectTable,
     setPagination,
     setData,
     setColumns,
-    selectTable,
     setSearchCommand,
   };
 };
