@@ -32,6 +32,10 @@ export const SqlDB = (props: Props) => {
     sqlTable.setSearchCommand(value);
   }
 
+  function exportDB() {
+    const data = sqlTable.exportDB();
+  }
+
   return (
     <Row class="gap-4 flex-1 overflow-hidden">
       <div class="pt-6">
@@ -48,6 +52,7 @@ export const SqlDB = (props: Props) => {
           <SqlControlPanel
             command={state.searchCommand}
             onCommand={setSearchCommand}
+            onSave={exportDB}
           />
           <Show when={state.rowsCount}>
             {(length) => (
@@ -58,7 +63,7 @@ export const SqlDB = (props: Props) => {
           </Show>
         </Row>
 
-        <SqlTable table={table} />
+        <SqlTable table={table} onRowUpdate={sqlTable.updateRow} />
 
         <SqlPagination
           pagination={state.pagination}

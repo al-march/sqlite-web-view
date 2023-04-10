@@ -1,14 +1,31 @@
-import { Table, flexRender } from "@tanstack/solid-table";
+import { Cell, Table, flexRender } from "@tanstack/solid-table";
 import { For, Show } from "solid-js";
+import { UpdatedRow } from "../../models/SqlUpdatedRow.model";
 import "./Table.css";
 
 type Props<T> = {
   ref?: (el: HTMLElement) => void;
   containerRef?: (el: HTMLElement) => void;
   table?: Table<T>;
+
+  onRowUpdate?: (updatedRow: UpdatedRow) => void;
 };
 
 export function SqlTable<T>(props: Props<T>) {
+  function onChange(cell: Cell<any, unknown>, value: string) {
+    const column = cell.column.id;
+
+    const updated: UpdatedRow = {
+      original: cell.row.original,
+      value: {
+        column,
+        value,
+      },
+    };
+
+    props.onRowUpdate?.(updated);
+  }
+
   return (
     <Show ref={props.ref} when={props.table}>
       {(table) => (
@@ -67,6 +84,10 @@ export function SqlTable<T>(props: Props<T>) {
                       <For each={row.getVisibleCells()}>
                         {(cell) => (
                           <div
+                            contentEditable
+                            onBlur={(e) =>
+                              onChange(cell, e.currentTarget.innerText)
+                            }
                             class="td"
                             style={{
                               width: cell.column.getSize() + "px",

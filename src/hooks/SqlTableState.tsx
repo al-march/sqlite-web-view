@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
 } from "@tanstack/solid-table";
 import { Database, QueryExecResult } from "sql.js";
+import { UpdatedRow } from "../models/SqlUpdatedRow.model";
 
 export type SqlTableState = {
   pagination: ISqlPagination;
@@ -167,6 +168,33 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     return Math.ceil(rowsCount / pageSize);
   }
 
+  function updateRow(row: UpdatedRow) {
+    const toMap = () => {
+      const entries = Object.entries({...row.original})
+      return entries.reduce((acc, [key, value], index) => {
+        acc += `${key} = '${value}'`
+        if (index < entries.length - 1) {
+          acc += ' AND '
+        }
+        return acc;
+      }, '');
+    }
+    
+    const command = /*sql*/`
+      UPDATE
+        ${state.selectedTable}
+      SET
+        ${row.value.column} = '${row.value.value}'
+      WHERE
+        ${toMap()};
+    `
+    props.db.exec(command);    
+  }
+
+  function exportDB() {
+    return props.db.export();
+  }
+
   return {
     state,
     table,
@@ -175,6 +203,8 @@ export const createSqlTable = (props: SqlTableStateProps) => {
     setData,
     setColumns,
     setSearchCommand,
+    updateRow,
+    exportDB
   };
 };
 
