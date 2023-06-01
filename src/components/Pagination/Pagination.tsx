@@ -1,5 +1,5 @@
 import { createMemo } from "solid-js";
-import { Button, Input, Row } from "@solsy/ui";
+import { Button, Input, Row, Select, Option } from "@solsy/ui";
 import { ISqlPagination } from "../../models/SqlTable.model";
 import "./Pagination.css";
 
@@ -96,15 +96,17 @@ export const SqlPagination = (props: SqlPaginationProps) => {
         of <b>{props.pageCount || 1}</b>
       </Row>
 
-      <select
-        class="select select-xs select-bordered"
+      <Select
+        bordered
+        size="xs"
+        class="w-[70px]"
         value={props.pagination.pageSize}
-        onChange={(e) => onPageSize(Number(e.currentTarget.value))}
+        onInput={(e) => onPageSize(Number(e))}
       >
-        <option value={10}>10</option>
-        <option value={50}>50</option>
-        <option value={100}>100</option>
-      </select>
+        <Option value={10}>10</Option>
+        <Option value={50}>50</Option>
+        <Option value={100}>100</Option>
+      </Select>
     </Row>
   );
 };
