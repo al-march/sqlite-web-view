@@ -1,5 +1,6 @@
 import { Show, createSignal, onMount } from "solid-js";
 import { SqliteViewer } from "./viewer";
+import { FileButton } from "./components";
 import "./App.css";
 
 export const App = () => {
@@ -8,11 +9,22 @@ export const App = () => {
 
   onMount(async () => {
     setWasm(await getWasm());
-    setDb(await initDB("/assets/db/dict.db"));
   });
+
+  async function dbFromFile(file: File) {
+    const buffer = await file.arrayBuffer();
+    const uint8Array = new Uint8Array(buffer);
+    setDb(uint8Array);
+  }
 
   return (
     <main class="h-screen p-4 flex flex-col gap-2 overflow-hidden">
+      <section>
+        <FileButton onFileLoad={dbFromFile}>Load DB</FileButton>
+
+        <input type="file" class="hidden" />
+      </section>
+
       <Show when={db()}>
         {(db) => <SqliteViewer db={db()} wasm={wasm()} />}
       </Show>
