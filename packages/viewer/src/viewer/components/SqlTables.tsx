@@ -13,7 +13,7 @@ export const SqlTables = (props: Props) => {
   return (
     <Row
       orientation={props.orientation}
-      class="gap-1 p-1 overflow-hidden overflow-y-auto"
+      class="gap-1 p-1 overflow-hidden overflow-y-auto h-full"
     >
       <For each={props.tables}>
         {(table) => (

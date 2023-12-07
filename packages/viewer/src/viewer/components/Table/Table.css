@@ -11,16 +11,23 @@
 tr,
 .tr {
   width: fit-content;
+  border-bottom-width: 2px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  @apply border-base-300;
 }
 
 .th,
 .td {
   box-shadow: inset 0 0 0 2px hsl(var(--b3));
-  padding: 0.25rem;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: keep-all;
   white-space: nowrap;
+  border-right-width: 1px;
+  border-left-width: 1px;
+
+  @apply px-2 border-base-300;
 }
 
 .th {
