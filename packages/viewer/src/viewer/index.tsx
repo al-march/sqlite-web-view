@@ -6,6 +6,7 @@ import initSqlJs from "sql.js";
 
 export type SqliteViewerProps = {
   db: ArrayLike<number> | Buffer;
+  wasm?: ArrayBuffer;
 };
 
 export const SqliteViewer = (props: SqliteViewerProps) => {
@@ -16,11 +17,17 @@ export const SqliteViewer = (props: SqliteViewerProps) => {
   });
 
   async function initDB() {
-    const sql = await initSqlJs({
-      locateFile: () => `/assets/sql-wasm.wasm`,
-    });
-
+    const sql = await getSQL();
     return new sql.Database(props.db);
+  }
+
+  // Try to init sql with wasm as binary 
+  async function getSQL() {
+    if (props.wasm) {
+      return await initSqlJs({
+        wasmBinary: props.wasm,
+      });
+    }
   }
 
   return (

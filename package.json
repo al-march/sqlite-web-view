@@ -1,16 +1,16 @@
 {
   "name": "sqlite-view",
   "version": "0.0.1",
-  "private": "true",
+  "author": "",
   "module": "index.ts",
+  "dependencies": {
+    "typescript": "^5.3.3"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "private": "true",
   "type": "module",
   "workspaces": [
     "./packages/*"
-  ],
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "typescript": "^5.3.3"
-  }
+  ]
 }
